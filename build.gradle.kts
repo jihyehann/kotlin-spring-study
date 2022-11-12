@@ -41,6 +41,9 @@ dependencies {
 	//querydsl
 	implementation("com.querydsl:querydsl-jpa:5.0.0")
 	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
+
+	//swagger
+	implementation("io.springfox:springfox-boot-starter:3.0.0")
 }
 
 tasks.withType<KotlinCompile> {
