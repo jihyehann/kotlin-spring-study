@@ -6,7 +6,7 @@ plugins {
 	kotlin("jvm") version "1.6.21"
 	kotlin("plugin.spring") version "1.6.21"
 	kotlin("plugin.jpa") version "1.6.21"
-	kotlin("kapt") version "1.3.61" //Querydsl
+	kotlin("kapt") version "1.7.10" //Querydsl
 }
 
 group = "com.study"
@@ -39,9 +39,8 @@ dependencies {
 	testImplementation("org.springframework.security:spring-security-test")
 
 	//querydsl
-	implementation("com.querydsl:querydsl-jpa")
-	kapt("com.querydsl:querydsl-apt:jpa")
-	kapt("org.springframework.boot:spring-boot-configuration-processor")
+	implementation("com.querydsl:querydsl-jpa:5.0.0")
+	kapt("com.querydsl:querydsl-apt:5.0.0:jpa")
 }
 
 tasks.withType<KotlinCompile> {
