@@ -16,4 +16,10 @@ class UserService(
         require (!userRepository.existsByEmail(request.email)) {"이미 가입된 이메일입니다."}
         return userRepository.save(request.toEntity())
     }
+
+    fun getUserInfo(userId: Long): GetUserResponse {
+        val user = userRepository.findById(userId)
+            .orElseThrow(){IllegalArgumentException("존재하지 않는 회원입니다.")}
+        return GetUserResponse(user)
+    }
 }

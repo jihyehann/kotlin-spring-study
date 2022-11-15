@@ -1,7 +1,9 @@
 package com.study.kopring.config
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.util.JSONPObject
+import com.study.kopring.controller.ApiResponse
 import com.study.kopring.utils.JwtTokenProvider
-import com.sun.security.auth.UserPrincipal
 import org.springframework.http.HttpHeaders.AUTHORIZATION
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.authority.AuthorityUtils.NO_AUTHORITIES
@@ -25,17 +27,22 @@ class JwtFilter(
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
-        val token = extractBearerToken(request)
-        if (token == null) {
+        try {
+            val token = extractBearerToken(request)
+            if (token == null) {
+                filterChain.doFilter(request, response)
+                return
+            }
+
+            val userId = tokenProvider.getSubject(token).toLong()
+            val authentication = UsernamePasswordAuthenticationToken(userId, null, NO_AUTHORITIES)
+            SecurityContextHolder.getContext().authentication = authentication
+
             filterChain.doFilter(request, response)
-            return
+        } catch (e: Exception) {
+            setErrorResponse(response, e.message)
         }
 
-        val userId = tokenProvider.getSubject(token)
-        val authentication = UsernamePasswordAuthenticationToken(UserPrincipal(userId), null, NO_AUTHORITIES)
-        SecurityContextHolder.getContext().authentication = authentication
-
-        filterChain.doFilter(request, response)
     }
 
     private fun extractBearerToken(request: HttpServletRequest): String? {
@@ -46,5 +53,9 @@ class JwtFilter(
         return authorization.substring(7)
     }
 
-
+    private fun setErrorResponse(response: HttpServletResponse, errorMessage: String?) {
+        response.contentType = "application/json;charset=UTF-8"
+        response.status = HttpServletResponse.SC_UNAUTHORIZED
+        response.writer.print(ObjectMapper().writeValueAsString(mapOf(Pair("message", errorMessage))))
+    }
 }

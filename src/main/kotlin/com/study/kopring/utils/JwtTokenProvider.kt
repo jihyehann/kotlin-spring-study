@@ -32,10 +32,10 @@ class JwtTokenProvider(
             getClaims(token).body.subject
         } catch (e: ExpiredJwtException) {
             log.info("만료된 토큰")
-            throw IllegalArgumentException("만료된 토큰")
+            throw IllegalArgumentException("만료된 토큰입니다.")
         } catch (e: Exception) {
             log.info("올바르지 않은 토큰")
-            throw IllegalArgumentException("올바르지 않은 토큰")
+            throw IllegalArgumentException("올바르지 않은 토큰입니다.")
         }
     }
 

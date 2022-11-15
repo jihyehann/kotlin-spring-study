@@ -1,12 +1,17 @@
 package com.study.kopring.config
 
+import com.study.kopring.controller.ExceptionHandler
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
 import org.springframework.security.config.http.SessionCreationPolicy
 
+
 @EnableWebSecurity
-class WebSecurityConfig : WebSecurityConfigurerAdapter() {
+class WebSecurityConfig(
+    private val jwtFilter: JwtFilter,
+    private val exceptionHandler: ExceptionHandler
+) : WebSecurityConfigurerAdapter() {
 
     override fun configure(http: HttpSecurity) {
         http.csrf().disable().authorizeRequests()

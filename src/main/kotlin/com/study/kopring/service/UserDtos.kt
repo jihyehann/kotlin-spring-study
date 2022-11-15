@@ -35,3 +35,18 @@ data class RegisterUserResponse(
     @ApiModelProperty(value = "토큰", example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiZXhwIjoxNjY4NDk5MDE3fQ.Zwb9To6T95xqdczpN93TT9uBBPu4nIe9PAGoZdKZDVg")
     val accessToken: String,
 )
+
+data class GetUserResponse(
+    @ApiModelProperty(value = "이메일 주소", example = "user@email.com")
+    val email: String,
+
+    @ApiModelProperty(value = "회원 이름", example = "홍길동")
+    val name: String,
+
+    @ApiModelProperty(value = "생년월일")
+    val birthday: LocalDate
+) {
+    constructor(user: User) : this(
+        user.email, user.name, user.birthday
+    )
+}
