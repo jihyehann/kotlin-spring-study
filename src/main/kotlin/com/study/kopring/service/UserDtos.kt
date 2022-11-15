@@ -30,3 +30,8 @@ data class RegisterUserRequest(
         return User(name, email, phoneNumber, birthday)
     }
 }
+
+data class RegisterUserResponse(
+    @ApiModelProperty(value = "토큰", example = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0IiwiZXhwIjoxNjY4NDk5MDE3fQ.Zwb9To6T95xqdczpN93TT9uBBPu4nIe9PAGoZdKZDVg")
+    val accessToken: String,
+)

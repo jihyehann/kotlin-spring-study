@@ -1,7 +1,9 @@
 package com.study.kopring.controller
 
 import com.study.kopring.service.RegisterUserRequest
+import com.study.kopring.service.RegisterUserResponse
 import com.study.kopring.service.UserService
+import com.study.kopring.utils.JwtTokenProvider
 import io.swagger.annotations.Api
 import io.swagger.annotations.ApiOperation
 import io.swagger.annotations.ApiResponses
@@ -16,7 +18,8 @@ import javax.validation.Valid
 @RequestMapping("/user")
 @RestController
 class UserController(
-    private val userService: UserService
+    private val userService: UserService,
+    private val tokenProvider: JwtTokenProvider
 ) {
 
     private val log = LoggerFactory.getLogger(javaClass)
@@ -27,9 +30,9 @@ class UserController(
         io.swagger.annotations.ApiResponse(code = 400, message = "회원가입 실패, 잘못된 입력값")
     )
     @PostMapping("/register")
-    fun register(@RequestBody @Valid request: RegisterUserRequest): ApiResponse<Unit> {
+    fun register(@RequestBody @Valid request: RegisterUserRequest): ApiResponse<RegisterUserResponse> {
         log.info("request = $request")
-        userService.createUser(request)
-        return ApiResponse.success(null)
+        val token = tokenProvider.createToken(userService.createUser(request).id)
+        return ApiResponse.success(RegisterUserResponse(token))
     }
 }
