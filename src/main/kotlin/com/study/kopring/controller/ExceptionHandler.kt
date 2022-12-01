@@ -28,7 +28,7 @@ class ExceptionHandler : ResponseEntityExceptionHandler() {
         val message = when (val exception = ex.cause) {
             is MissingKotlinParameterException -> "${exception.parameter.name.orEmpty()}는 널이어서는 안됩니다"
             is InvalidFormatException -> "${exception.path.last().fieldName.orEmpty()}는 올바른 형식이어야 합니다"
-            else -> exception?.message.orEmpty()
+            else -> exception?.message?:"올바르지 않은 요청입니다."
         }
         return ResponseEntity.badRequest().body(ApiResponse.error(message))
     }

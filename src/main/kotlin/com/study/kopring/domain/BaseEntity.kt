@@ -8,7 +8,7 @@ import javax.persistence.*
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener::class)
-abstract class BaseEntity{
+abstract class BaseEntity {
     @CreatedDate
     @Column(updatable = false)
     var createdDate: Timestamp? = null

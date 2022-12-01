@@ -1,5 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val kotestVersion: String by project
+val mockkVersion: String by project
+
 plugins {
 	id("org.springframework.boot") version "2.7.5"
 	id("io.spring.dependency-management") version "1.0.15.RELEASE"
@@ -32,7 +35,7 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 	compileOnly("org.projectlombok:lombok")
-	runtimeOnly("com.h2database:h2")
+	testImplementation("com.h2database:h2")
 	runtimeOnly("com.mysql:mysql-connector-j")
 	annotationProcessor("org.projectlombok:lombok")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
@@ -49,6 +52,26 @@ dependencies {
 	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+	// kotest
+	testImplementation("io.kotest:kotest-runner-junit5:${kotestVersion}")
+	testImplementation("io.kotest:kotest-assertions-core:${kotestVersion}")
+	testImplementation("io.kotest:kotest-extensions-spring:${kotestVersion}") // @SpringBootTest 통합테스트에서 Kotest 레이아웃을 사용하기 위함
+
+	// mockk
+	testImplementation("io.mockk:mockk:${mockkVersion}")
+	testImplementation("com.ninja-squad:springmockk:3.1.1") // SpringMockk - @MockkBean, @SpykBean 제공
+
+}
+
+noArg {
+	annotation("javax.persistence.Entity")
+}
+
+allOpen {
+	annotation("javax.persistence.Entity")
+	annotation("javax.persistence.MappedSuperclass")
+	annotation("javax.persistence.Embeddable")
 }
 
 tasks.withType<KotlinCompile> {
